@@ -4,6 +4,17 @@ document.addEventListener("DOMContentLoaded", () => {
   const signupForm = document.getElementById("signup-form");
   const messageDiv = document.getElementById("message");
 
+  // Kleine helper om tekst veilig in HTML te plaatsen
+  function escapeHtml(str) {
+    if (str === null || str === undefined) return "";
+    return String(str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+
   // Function to fetch activities from API
   async function fetchActivities() {
     try {
@@ -18,13 +29,29 @@ document.addEventListener("DOMContentLoaded", () => {
         const activityCard = document.createElement("div");
         activityCard.className = "activity-card";
 
-        const spotsLeft = details.max_participants - details.participants.length;
+        const spotsLeft = details.max_participants - (details.participants ? details.participants.length : 0);
+
+        // Bouw deelnemers-sectie als bulleted list (of subtiele placeholder)
+        let participantsHtml;
+        if (Array.isArray(details.participants) && details.participants.length > 0) {
+          participantsHtml = `<ul class="participants-list">` +
+            details.participants
+              .map((p) => `<li class="participant-item">${escapeHtml(p)}</li>`)
+              .join("") +
+            `</ul>`;
+        } else {
+          participantsHtml = `<p class="no-participants">Nog geen deelnemers</p>`;
+        }
 
         activityCard.innerHTML = `
-          <h4>${name}</h4>
-          <p>${details.description}</p>
-          <p><strong>Schedule:</strong> ${details.schedule}</p>
-          <p><strong>Availability:</strong> ${spotsLeft} spots left</p>
+          <h4>${escapeHtml(name)}</h4>
+          <p class="activity-desc">${escapeHtml(details.description)}</p>
+          <p><strong>Schema:</strong> ${escapeHtml(details.schedule)}</p>
+          <p><strong>Beschikbaarheid:</strong> ${spotsLeft} plekken over</p>
+          <div class="participants-section">
+            <strong>Deelnemers</strong>
+            ${participantsHtml}
+          </div>
         `;
 
         activitiesList.appendChild(activityCard);

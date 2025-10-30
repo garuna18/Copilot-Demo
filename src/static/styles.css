@@ -74,6 +74,33 @@ section h3 {
   margin-bottom: 8px;
 }
 
+/* Nieuwe stijlen voor deelnemers */
+.participants-section {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #eee;
+  font-size: 14px;
+  color: #333;
+}
+
+.participants-list {
+  margin: 8px 0 0 18px;
+  padding: 0;
+  list-style: disc;
+}
+
+.participant-item {
+  margin: 4px 0;
+  color: #444;
+  word-break: break-word;
+}
+
+.no-participants {
+  margin-top: 8px;
+  font-style: italic;
+  color: #666;
+}
+
 .form-group {
   margin-bottom: 15px;
 }
